@@ -1,0 +1,96 @@
+{
+    "users": {
+        "table": "users",
+        "columns": {
+            "id": "user_id",
+            "name": "name",
+            "email": "email",
+            "password": "password",
+            "created_on": "created_on",
+            "updated_on": "updated_on"
+        }
+    },
+    "dim_candidates": {
+        "table": "dim_candidates",
+        "columns": {
+            "candidate_id": "candidate_id",
+            "candidate_name": "candidate_name",
+            "email": "email",
+            "phone": "phone",
+            "birth_date": "birth_date"
+        }
+    },
+    "dim_jobs": {
+        "table": "dim_jobs",
+        "columns": {
+            "job_id": "job_id",
+            "job_title": "job_title",
+            "number_of_positions": "number_of_positions",
+            "job_requirements": "job_requirements",
+            "job_status": "job_status",
+            "location": "location",
+            "responsible_person": "responsible_person",
+            "opening_date": "opening_date",
+            "closing_date": "closing_date"
+        }
+    },
+    "dim_recruitment_processes": {
+        "table": "dim_recruitment_processes",
+        "columns": {
+            "process_id": "process_id",
+            "process_name": "process_name",
+            "start_date": "start_date",
+            "end_date": "end_date",
+            "process_status": "process_status",
+            "description_processes": "process_description"
+        }
+    },
+    "dim_recruiters": {
+        "table": "dim_recruiters",
+        "columns": {
+            "recruiter_id": "recruiter_id",
+            "recruiter_name": "recruiter_name",
+            "role": "role",
+            "feedbacks_given": "feedbacks_given"
+        }
+    },
+    "dim_date": {
+        "table": "dim_date",
+        "columns": {
+            "date_id": "date_id",
+            "day": "day",
+            "month": "month",
+            "year": "year"
+        }
+    },
+    "dim_hour": {
+        "table": "dim_hour",
+        "columns": {
+            "hour_id": "hour_id",
+            "hour": "hour"
+        }
+    },
+    "fact_applications": {
+        "table": "fact_applications",
+        "columns": {
+            "recruiter_id": "recruiter_id",
+            "candidate_id": "candidate_id",
+            "job_id": "job_id",
+            "process_id": "process_id",
+            "number_of_applications": "number_of_applications"
+        }
+    },
+    "fact_hirings": {
+        "table": "fact_hirings",
+        "columns": {
+            "hiring_id": "hiring_id",
+            "candidate_id": "candidate_id",
+            "job_id": "job_id",
+            "hiring_date": "hiring_date",
+            "initial_salary": "initial_salary",
+            "contract_type": "contract_type",
+            "acceptance_date": "acceptance_date"
+        }
+    }
+  }
+  
