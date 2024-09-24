@@ -1,7 +1,7 @@
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv,find_dotenv
 
-load_dotenv(dotenv_path='etl_project\\env.env')
+load_dotenv(find_dotenv())
 
 DATABASE_URI = os.getenv('DATABASE_URI')
 DIRECTORY_PATH = os.getenv('DIRECTORY_PATH')

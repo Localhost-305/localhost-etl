@@ -12,6 +12,8 @@ from datetime import datetime
 
 
 
+
+
 def load_sheet_mappings(json_file):
     with open(json_file, 'r', encoding='utf-8') as f:
         return json.load(f)
@@ -33,12 +35,12 @@ def process_etl(file_path, sheet_name, mapping, error_logs):
                         start_date = row['start_date']
                         end_date = row['end_date']
                         if pd.to_datetime(start_date) > pd.to_datetime(end_date):
-                            motivo = "Data inicial maior que a data final"
+                            reason = "Data inicial maior que a data final"
                             data = row.to_dict()
                             data = convert_timestamps(data)
                             error_entry = {
                                 "data": data,
-                                "motivo": motivo
+                                "reason": reason
                             }
                             error_logs[mapping["table"]].append(error_entry)
                             continue
@@ -49,22 +51,22 @@ def process_etl(file_path, sheet_name, mapping, error_logs):
                     pbar.update(1)
 
                 except exc.IntegrityError as e:
-                    motivo = map_error_message(str(e.orig))
+                    reason = map_error_message(str(e.orig))
                     data = row.to_dict()
                     data = convert_timestamps(data)
                     error_entry = {
                         "data": data,
-                        "motivo": motivo
+                        "reason": reason
                     }
                     error_logs[mapping["table"]].append(error_entry)
 
                 except Exception as e:
-                    motivo = map_error_message(str(e))
+                    reason = map_error_message(str(e))
                     data = row.to_dict()
                     data = convert_timestamps(data)
                     error_entry = {
                         "data": data,
-                        "motivo": motivo
+                        "reason": reason
                     }
                     error_logs[mapping["table"]].append(error_entry)
 
@@ -75,13 +77,12 @@ def process_etl(file_path, sheet_name, mapping, error_logs):
         })
 
     except Exception as e:
-        motivo = map_error_message(str(e))
+        reason = map_error_message(str(e))
         error_logs.setdefault("logs_genericos", []).append({
             "message": f"Erro ao processar a aba '{sheet_name}'.",
-            "motivo": motivo,
+            "reason": reason,
             "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         })
-        # Mover arquivo para a pasta de erros se houver erro
         error_file_path = os.path.join(ERROR_DIRECTORY_PATH, os.path.basename(file_path))
         os.rename(file_path, error_file_path)
         print(f"Arquivo movido para a pasta de erros: {error_file_path}")
@@ -89,17 +90,21 @@ def process_etl(file_path, sheet_name, mapping, error_logs):
 
 
 def handle_error(e, row, table, error_logs):
-    motivo = map_error_message(str(e))
+    reason = map_error_message(str(e))
     data = row.to_dict() if row else {}
-    error_entry = {"data": convert_timestamps(data), "motivo": motivo}
+    error_entry = {"data": convert_timestamps(data), "reason": reason}
     error_logs.setdefault(table, []).append(error_entry)
 
+
 def run_etl(file_path):
-    sheet_mappings = load_sheet_mappings('etl_project\\config\\sheet_mappings.json')
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    json_file_path = os.path.join(current_dir, '..', '..', 'config', 'sheet_mappings.json')
+    
+    sheet_mappings = load_sheet_mappings(json_file_path)
+    
     error_logs = {mapping["table"]: [] for mapping in sheet_mappings.values()}
     success_count = 0
-
-
 
     for sheet, mapping in sheet_mappings.items():
         process_etl(file_path, sheet, mapping, error_logs)
