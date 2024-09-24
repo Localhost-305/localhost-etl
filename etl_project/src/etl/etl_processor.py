@@ -12,6 +12,8 @@ from datetime import datetime
 
 
 
+
+
 def load_sheet_mappings(json_file):
     with open(json_file, 'r', encoding='utf-8') as f:
         return json.load(f)
@@ -81,7 +83,6 @@ def process_etl(file_path, sheet_name, mapping, error_logs):
             "motivo": motivo,
             "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         })
-        # Mover arquivo para a pasta de erros se houver erro
         error_file_path = os.path.join(ERROR_DIRECTORY_PATH, os.path.basename(file_path))
         os.rename(file_path, error_file_path)
         print(f"Arquivo movido para a pasta de erros: {error_file_path}")
@@ -94,12 +95,16 @@ def handle_error(e, row, table, error_logs):
     error_entry = {"data": convert_timestamps(data), "motivo": motivo}
     error_logs.setdefault(table, []).append(error_entry)
 
+
 def run_etl(file_path):
-    sheet_mappings = load_sheet_mappings('etl_project\\config\\sheet_mappings.json')
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    json_file_path = os.path.join(current_dir, '..', '..', 'config', 'sheet_mappings.json')
+    
+    sheet_mappings = load_sheet_mappings(json_file_path)
+    
     error_logs = {mapping["table"]: [] for mapping in sheet_mappings.values()}
     success_count = 0
-
-
 
     for sheet, mapping in sheet_mappings.items():
         process_etl(file_path, sheet, mapping, error_logs)
