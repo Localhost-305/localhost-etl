@@ -1,24 +1,21 @@
 # 🌐 Localhost ETL Project
 
-Projeto **Localhost ETL**! Este é um sistema de extração, transformação e carga (ETL) desenvolvido para processar dados de arquivos Excel e armazená-los em um banco de dados MySQL.
+Bem-vindo ao projeto **Localhost ETL**! 🚀 Este é um sistema completo de **Extração, Transformação e Carga (ETL)**, desenvolvido para processar dados a partir de arquivos Excel e armazená-los de forma eficiente em um banco de dados **MySQL**.
 
 ## 📚 Visão Geral
 
-O **Localhost ETL** foi projetado para automatizar o processo de integração de dados. Ele monitora um diretório específico em busca de arquivos Excel, limpa os dados, os transforma conforme necessário e os carrega em um banco de dados.
+O projeto **Localhost ETL** foi criado para automatizar o processo de integração de dados, detectando automaticamente novos arquivos Excel, realizando a limpeza e transformação dos dados, e armazenando-os no banco de dados.
 
 ### 🎯 Objetivos do Projeto
 
-- Monitorar continuamente um diretório em busca de novos arquivos Excel.
-- Realizar a limpeza e transformação dos dados contidos nesses arquivos.
-- Armazenar os dados limpos em um banco de dados MySQL.
-- Gerar logs detalhados de erros e sucessos durante o processamento.
+- 👀 Monitorar continuamente um diretório em busca de novos arquivos Excel.
+- 🧹 Realizar a limpeza e transformação dos dados conforme necessário.
+- 💾 Armazenar os dados limpos em um banco de dados **MySQL**.
+- 📝 Gerar logs detalhados de erros e sucessos durante o processamento.
 
 ## 🏗️ Arquitetura do Projeto
 
-O projeto está organizado da seguinte maneira:
-### Estrutura do Projeto
-
-Abaixo está a estrutura do projeto `localhost-etl`, que inclui todos os arquivos e diretórios relevantes:
+Abaixo está a estrutura do projeto `localhost-etl`, que inclui todos os arquivos e diretórios principais:
 
 ```bash
 localhost-etl/
@@ -27,64 +24,52 @@ localhost-etl/
 │   │   ├── config.py                  # Configurações e variáveis de ambiente
 │   │   ├── database.py                # Configuração do banco de dados e operações
 │   │   ├── etl/
-│   │   │   ├── etl_processor.py        # Processamento do ETL
+│   │   │   ├── etl_processor.py        # Processamento ETL
 │   │   │   ├── data_cleaning.py        # Funções de limpeza de dados
-│   │   │   ├── error_handling.py       # Mapeamento de erros
+│   │   │   ├── error_handling.py       # Tratamento de erros
 │   │   ├── logging/
-│   │   │   ├── logger.py               # Configuração do logging
+│   │   │   ├── logger.py               # Configuração de logging
 │   │   ├── file_monitor.py             # Monitoramento de arquivos Excel
 │   │   ├── utils.py                    # Funções utilitárias
 │   │   ├── error_files/                # Diretório para arquivos com erros
-│   │   │   └── ERROR_DIRECTORY_PATH/    # Caminho para arquivos de erro
-│   │   │   └── LOG_ERRORS_JSON          # Caminho para arquivos de json de erros
-│   │   ├── completed_files/            # Diretório para arquivos processados com sucesso
-│   │   │   └── COMPLETED_DIRECTORY_PATH/ # Caminho para arquivos processados
-│   │   └── main.py                     # Execução do script principal
 │   ├── config/
-│   │   └── sheet_mappings.json         # Arquivo JSON com os mapeamentos
-│   ├── env.env                         # Arquivo de variáveis de ambiente
+│   │   └── sheet_mappings.json         # Mapeamento entre Excel e Banco de Dados
+│   ├── .env                         # Variáveis de ambiente
 │   ├── requirements.txt                # Dependências do projeto
-├── README.md                       # Documentação do projeto 
+├── README.md                           # Documentação do projeto
 ```
-
 
 ## ⚙️ Como Funciona
 
-1. **Monitoramento de Arquivos**: O script `file_monitor.py` utiliza a biblioteca `watchdog` para monitorar um diretório específico em busca de novos arquivos Excel.
+- **Monitoramento de Arquivos**: O script `file_monitor.py` utiliza a biblioteca `watchdog` para monitorar um diretório específico em busca de novos arquivos Excel.
+- **Processamento ETL**: Ao detectar um novo arquivo, a função `run_etl` é chamada para extrair, transformar e carregar os dados.
+- **Limpeza de Dados**: Funções no módulo `data_cleaning.py` realizam a limpeza e formatação dos dados.
+- **Armazenamento no Banco de Dados**: Os dados transformados são inseridos em um banco de dados **MySQL**.
+- **Logs de Erros**: Qualquer erro é registrado em arquivos JSON no diretório `error_files`.
 
-2. **Processamento ETL**: Quando um novo arquivo é detectado, a função `run_etl` é chamada, iniciando o processo de extração, transformação e carga dos dados.
+## 📊 Mapeamento de Dados
 
-3. **Limpeza de Dados**: O módulo `data_cleaning.py` contém funções para limpar e formatar os dados conforme as regras definidas.
+O projeto utiliza o arquivo `sheet_mappings.json` para mapear os dados do Excel para as tabelas do banco de dados MySQL. Abaixo está o mapeamento entre as abas do Excel e as tabelas do banco:
 
-4. **Armazenamento no Banco de Dados**: Os dados transformados são armazenados em um banco de dados MySQL, conforme definido nas configurações.
-
-5. **Logs de Erros**: Erros durante o processamento são registrados em arquivos JSON no diretório `error_files`.
-
-
-## 📊Mapeamento de Dados
-
-Abaixo está o mapeamento entre as abas do arquivo Excel e as tabelas do banco de dados, juntamente com uma breve descrição de cada uma.
-
-| Aba do Excel                | Tabela no Banco                | Descrição                                   |
+| 📄 **Aba do Excel**           | 🛢️ **Tabela no Banco**          | 📋 **Descrição**                           |
 |-----------------------------|---------------------------------|---------------------------------------------|
-| **processos seletivos**      | `dim_recruitment_processes`     | Contém os processos seletivos               |
-| **vagas**                   | `dim_jobs`                      | Informações sobre as vagas disponíveis      |
-| **candidatos**              | `dim_candidates`                | Detalhes dos candidatos                     |
+| **processos seletivos**      | `dim_recruitment_processes`     | Processos seletivos e seus detalhes         |
+| **vagas**                   | `dim_jobs`                      | Informações das vagas abertas               |
+| **candidatos**              | `dim_candidates`                | Detalhes dos candidatos                    |
 | **contratações**            | `fact_hirings`                  | Registro das contratações feitas            |
-| **entrevistas**             | `fact_applications`             | Dados sobre as entrevistas e aplicações     |
-| **avaliacao de candidatos** | `fact_applications`             | Resultados das avaliações dos candidatos    |
-| **feedbacks**               | `fact_applications`             | Feedbacks recebidos durante o processo      |
-| **rh**                      | `dim_recruiters`                | Informações sobre os recrutadores           |
-| **acoes do processo**       | `fact_applications`             | Registro das ações realizadas no processo   |
+| **entrevistas**             | `fact_applications`             | Informações sobre entrevistas e aplicações  |
+| **avaliacao de candidatos** | `fact_applications`             | Avaliações dos candidatos                   |
+| **feedbacks**               | `fact_applications`             | Feedbacks dados ao longo do processo        |
+| **rh**                      | `dim_recruiters`                | Informações dos recrutadores                |
+| **acoes do processo**       | `fact_applications`             | Ações realizadas no processo seletivo       |
 
+## 🛠️ Pré-requisitos
 
-## 🛠️ Dependências
+Para garantir que o projeto funcione corretamente, certifique-se de ter o seguinte instalado:
 
-Certifique-se de que você tem as seguintes dependências instaladas. Você pode instalar todas as dependências com o seguinte comando:
-
-```bash
-pip install -r requirements.txt
-```
+- **Python 3.x**
+- **MySQL**
+- Bibliotecas Python necessárias (instaladas via `pip`)
 
 
 ## 🚀 Como Executar o Projeto
@@ -98,13 +83,21 @@ cd localhost-etl/etl_project
 ### 2. Configurações:
 * Edite o arquivo env.env para definir as variáveis de ambiente necessárias, como a URI do banco de dados e diretórios de log.
 
-### 3. Execute o Script Principal:
+
+### 3. 📦 Instalação das Dependências:
+* Na raiz do projeto, dentro da pasta `etl_project`, você encontrará o arquivo `requirements.txt`. Para instalar todas as dependências necessárias, execute o comando abaixo:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Execute o Script Principal:
 
 ```bash
 python src/main.py
 ```
 
-### 4. Monitore o Diretório:
+### 5. Monitore o Diretório:
 * Coloque seus arquivos Excel no diretório especificado nas variáveis de ambiente. O sistema irá processá-los automaticamente.
 
 
