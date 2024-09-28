@@ -1,0 +1,4 @@
+__pycache__/
+*.xlsx
+src/error_files/LOG_ERRORS_JSON/*
+
