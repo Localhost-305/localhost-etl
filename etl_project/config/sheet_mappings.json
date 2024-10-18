@@ -89,7 +89,8 @@
             "hiring_date": "hiring_date",
             "initial_salary": "initial_salary",
             "contract_type": "contract_type",
-            "acceptance_date": "acceptance_date"
+            "acceptance_date": "acceptance_date",
+            "qty_hirings": "qty_hirings"
         }
     }
   }

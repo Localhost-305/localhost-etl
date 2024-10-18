@@ -11,9 +11,6 @@ from watchdog.events import FileSystemEventHandler
 from datetime import datetime
 
 
-
-
-
 def load_sheet_mappings(json_file):
     with open(json_file, 'r', encoding='utf-8') as f:
         return json.load(f)
@@ -27,6 +24,10 @@ def process_etl(file_path, sheet_name, mapping, error_logs):
 
         if sheet_name == "dim_candidates":
             df['phone'] = df['phone'].apply(clean_phone)
+        
+        if 'qty_hirings' in df.columns:
+            df['qty_hirings'] = df['qty_hirings'].fillna(0.0)
+
 
         with tqdm(total=len(df), desc=f"Processando {sheet_name}", unit="linha") as pbar:
             for idx, row in df.iterrows():
