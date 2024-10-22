@@ -29,22 +29,31 @@ def process_etl(file_path, sheet_name, mapping, error_logs):
             df['qty_hirings'] = df['qty_hirings'].fillna(0.0)
 
 
+        date_columns = {
+            'start_date': 'end_date',
+            'opening_date': 'closing_date',
+            'hiring_date': 'contract_end_date',
+            'created_on' : 'updated_on'
+        }
+        
         with tqdm(total=len(df), desc=f"Processando {sheet_name}", unit="linha") as pbar:
             for idx, row in df.iterrows():
                 try:
-                    if 'start_date' in row and 'end_date' in row:
-                        start_date = row['start_date']
-                        end_date = row['end_date']
-                        if pd.to_datetime(start_date) > pd.to_datetime(end_date):
-                            reason = "Data inicial maior que a data final"
-                            data = row.to_dict()
-                            data = convert_timestamps(data)
-                            error_entry = {
-                                "data": data,
-                                "reason": reason
-                            }
-                            error_logs[mapping["table"]].append(error_entry)
-                            continue
+
+                    for start_col, end_col in date_columns.items():
+                        if start_col in row and end_col in row:
+                            start_date = row[start_col]
+                            end_date = row[end_col]
+                            if pd.to_datetime(start_date) > pd.to_datetime(end_date):
+                                reason = f"Data inicial {start_col} maior que a data final {end_col}"
+                                data = row.to_dict()
+                                data = convert_timestamps(data)
+                                error_entry = {
+                                    "data": data,
+                                    "reason": reason
+                                }
+                                error_logs[mapping["table"]].append(error_entry)
+                                continue
 
                     row_df = pd.DataFrame([row])
                     row_df.to_sql(mapping["table"], con=engine, if_exists='append', index=False)
@@ -52,24 +61,35 @@ def process_etl(file_path, sheet_name, mapping, error_logs):
                     pbar.update(1)
 
                 except exc.IntegrityError as e:
-                    reason = map_error_message(str(e.orig))
-                    data = row.to_dict()
-                    data = convert_timestamps(data)
-                    error_entry = {
-                        "data": data,
-                        "reason": reason
-                    }
-                    error_logs[mapping["table"]].append(error_entry)
-
+                    handle_error(e, row, mapping["table"], error_logs)
                 except Exception as e:
-                    reason = map_error_message(str(e))
-                    data = row.to_dict()
-                    data = convert_timestamps(data)
-                    error_entry = {
-                        "data": data,
-                        "reason": reason
-                    }
-                    error_logs[mapping["table"]].append(error_entry)
+                    handle_error(e, row, mapping["table"], error_logs)
+
+        success_message = f"Dados da aba '{sheet_name}' inseridos na tabela '{mapping['table']}'."
+        error_logs.setdefault("logs_genericos", []).append({
+            "message": success_message,
+            "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        })
+
+    except exc.IntegrityError as e:
+        reason = map_error_message(str(e.orig))
+        data = row.to_dict()
+        data = convert_timestamps(data)
+        error_entry = {
+            "data": data,
+            "reason": reason
+        }
+        error_logs[mapping["table"]].append(error_entry)
+
+    except Exception as e:
+        reason = map_error_message(str(e))
+        data = row.to_dict()
+        data = convert_timestamps(data)
+        error_entry = {
+            "data": data,
+            "reason": reason
+        }
+        error_logs[mapping["table"]].append(error_entry)
 
         success_message = f"Dados da aba '{sheet_name}' inseridos na tabela '{mapping['table']}'."
         error_logs.setdefault("logs_genericos", []).append({
