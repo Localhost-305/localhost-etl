@@ -3,4 +3,4 @@ WORKDIR /app
 COPY /etl_project/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-CMD ["python", "app.py"]
+ENTRYPOINT ["python", "etl_project/main.py"]
