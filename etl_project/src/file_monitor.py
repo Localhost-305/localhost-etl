@@ -25,8 +25,10 @@ def start_monitoring():
             run_etl(os.path.join(DIRECTORY_PATH, filename))
 
     try:
+        print("Entrando no loop de monitoramento...")
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
+        print("Monitoramento encerrado.")
         observer.stop()
     observer.join()
