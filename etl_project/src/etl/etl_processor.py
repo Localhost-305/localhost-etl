@@ -3,7 +3,7 @@ import json
 import os
 from sqlalchemy import exc
 from database import engine
-from config import DIRECTORY_PATH, ERROR_DIRECTORY_PATH, LOG_DIRECTORY_PATH, COMPLETED_DIRECTORY_PATH
+from config import DIRECTORY_PATH, ERROR_DIRECTORY_PATH, LOG_DIRECTORY_PATH #, COMPLETED_DIRECTORY_PATH
 from .data_cleaning import clean_phone, convert_timestamps, capitalize_columns
 from .error_handling import map_error_message
 from tqdm import tqdm
@@ -119,16 +119,16 @@ def run_etl(file_path):
 
     print(f"ETL finalizado. Log de erros salvo em: {log_file}")
 
-    if success_count == len(sheet_mappings):
-        completed_path = os.path.join(COMPLETED_DIRECTORY_PATH, os.path.basename(file_path))
+    # if success_count == len(sheet_mappings):
+    #     completed_path = os.path.join(COMPLETED_DIRECTORY_PATH, os.path.basename(file_path))
 
-        counter = 1
-        while os.path.exists(completed_path):
-            completed_path = os.path.join(COMPLETED_DIRECTORY_PATH, f"{base_name}_{counter}.xlsx")
-            counter += 1
+    #     counter = 1
+    #     while os.path.exists(completed_path):
+    #         completed_path = os.path.join(COMPLETED_DIRECTORY_PATH, f"{base_name}_{counter}.xlsx")
+    #         counter += 1
 
-        os.rename(file_path, completed_path)
-        print(f"Arquivo {file_path} movido para a pasta de concluídos: {completed_path}")
+    #     os.rename(file_path, completed_path)
+    #     print(f"Arquivo {file_path} movido para a pasta de concluídos: {completed_path}")
 
 class ExcelFileEventHandler(FileSystemEventHandler):
     def on_created(self, event):
