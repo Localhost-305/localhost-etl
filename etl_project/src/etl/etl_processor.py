@@ -119,6 +119,12 @@ def run_etl(file_path):
 
     print(f"ETL finalizado. Log de erros salvo em: {log_file}")
 
+    try:
+        os.remove(file_path)
+        print(f"Arquivo {file_path} removido com sucesso após o processamento.")
+    except Exception as e:
+        print(f"Erro ao remover o arquivo {file_path}: {e}")
+
     # if success_count == len(sheet_mappings):
     #     completed_path = os.path.join(COMPLETED_DIRECTORY_PATH, os.path.basename(file_path))
 
