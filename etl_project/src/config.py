@@ -26,4 +26,5 @@ def check_directory_creation(directory_path):
 check_directory_creation(COMPLETED_DIRECTORY_PATH)
 check_directory_creation(ERROR_DIRECTORY_PATH)
 check_directory_creation(LOG_DIRECTORY_PATH)
+check_directory_creation(DIRECTORY_PATH)
 print()
