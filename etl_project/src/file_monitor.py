@@ -13,7 +13,6 @@ class ExcelFileEventHandler(FileSystemEventHandler):
         run_etl(event.src_path)
 
 def start_monitoring():
-    print('arquivo atual: file_monitor.py')
     event_handler = ExcelFileEventHandler()
     observer = Observer()
     observer.schedule(event_handler, path=DIRECTORY_PATH, recursive=False)
@@ -25,10 +24,8 @@ def start_monitoring():
             run_etl(os.path.join(DIRECTORY_PATH, filename))
 
     try:
-        print("Entrando no loop de monitoramento...")
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
-        print("Monitoramento encerrado.")
         observer.stop()
     observer.join()
