@@ -3,5 +3,6 @@ from utils import remove_pycache
 import os
 
 if __name__ == "__main__":
-    remove_pycache(os.getcwd())  
+    remove_pycache(os.getcwd())
+    print('iniciando o monitoramento - arquivo atual: main.py')
     start_monitoring()

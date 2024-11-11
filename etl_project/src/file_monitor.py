@@ -13,6 +13,7 @@ class ExcelFileEventHandler(FileSystemEventHandler):
         run_etl(event.src_path)
 
 def start_monitoring():
+    print('arquivo atual: file_monitor.py')
     event_handler = ExcelFileEventHandler()
     observer = Observer()
     observer.schedule(event_handler, path=DIRECTORY_PATH, recursive=False)
