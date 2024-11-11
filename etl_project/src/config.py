@@ -9,9 +9,21 @@ LOG_DIRECTORY_PATH = os.getenv('LOG_DIRECTORY_PATH')
 COMPLETED_DIRECTORY_PATH = os.getenv('COMPLETED_DIRECTORY_PATH')
 ERROR_DIRECTORY_PATH = os.getenv('ERROR_DIRECTORY_PATH')
 
-print('\n\n teste teste \n\n deu certo:\n ')
-print(DATABASE_URI + ' \n ' + DIRECTORY_PATH + ' \n ' + LOG_DIRECTORY_PATH + ' \n ' + COMPLETED_DIRECTORY_PATH + ' \n ' + ERROR_DIRECTORY_PATH)
-
 os.makedirs(COMPLETED_DIRECTORY_PATH, exist_ok=True)
 os.makedirs(ERROR_DIRECTORY_PATH, exist_ok=True)
 os.makedirs(LOG_DIRECTORY_PATH, exist_ok=True)
+
+
+
+
+
+def check_directory_creation(directory_path):
+    if os.path.isdir(directory_path):
+        print(f"\nDiretório '{directory_path}' já existe ou foi criado com sucesso.")
+    else:
+        print(f"\nFalha ao criar ou acessar o diretório '{directory_path}'.")
+
+check_directory_creation(COMPLETED_DIRECTORY_PATH)
+check_directory_creation(ERROR_DIRECTORY_PATH)
+check_directory_creation(LOG_DIRECTORY_PATH)
+print()
