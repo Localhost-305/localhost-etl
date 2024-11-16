@@ -32,4 +32,4 @@ jobs:
         run: docker image prune -a -f
 
       - name: Run Docker container
-        run: docker run -d --name ${{ secrets.DOCKER_CONTAINER_ETL }} --network ${{ secrets.DOCKER_NETWORK }} -v shared-data:${{ vars.DOCKER_VOLUME_SHARED }} ghcr.io/${{ vars.GIT_REPOSITORY_ETL }}/${{ vars.DOCKER_IMAGE_ETL }}:latest
+        run: docker run -d --name ${{ secrets.DOCKER_CONTAINER_ETL }} --network ${{ secrets.DOCKER_NETWORK }} -v shared-data:${{ vars.DOCKER_VOLUME_SHARED }} -p 5000:5000 ghcr.io/${{ vars.GIT_REPOSITORY_ETL }}/${{ vars.DOCKER_IMAGE_ETL }}:latest
