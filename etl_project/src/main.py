@@ -24,6 +24,7 @@ def remove_pycache_from_current_directory():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
+    print('\n\nENTROU NO ENDPOINT \n\n')
     file = request.files.get('file')
     if file and file.filename.endswith('.xlsx'):
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
